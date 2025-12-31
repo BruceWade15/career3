@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Decision Framework</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #4863ea;
+            color: #e4f312;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #1e3a8a;
+            background-color: #e4f312;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        h2 {
+            color: #e4f312;
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+
+        .description {
+            margin-bottom: 30px;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #1e3a8a;
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: rgba(255, 255, 255, 0.95);
+            color: #1e3a8a;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #e4f312;
+            box-shadow: 0 0 10px rgba(228, 243, 18, 0.3);
+        }
+
+        .question-container {
+            margin-bottom: 30px;
+        }
+
+        .question {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: rgba(30, 58, 138, 0.3);
+            border-radius: 8px;
+            border-left: 5px solid #e4f312;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-button {
+            background-color: #1e3a8a;
+            color: #e4f312;
+            border: 2px solid #e4f312;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            font-weight: 500;
+        }
+
+        .option-button:hover {
+            background-color: #e4f312;
+            color: #1e3a8a;
+            transform: translateX(5px);
+        }
+
+        .option-button:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background-color: #1e3a8a;
+            color: #e4f312;
+            border: 2px solid #e4f312;
+            padding: 15px 40px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 20px auto;
+        }
+
+        .btn-primary:hover {
+            background-color: #e4f312;
+            color: #1e3a8a;
+            transform: scale(1.05);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .results-container {
+            text-align: center;
+        }
+
+        .results-header {
+            background-color: #1e3a8a;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .results-header h2 {
+            color: #e4f312;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .user-info {
+            color: #e4f312;
+            font-size: 18px;
+            margin-top: 15px;
+        }
+
+        .category-result {
+            background-color: rgba(30, 58, 138, 0.3);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border: 3px solid #e4f312;
+        }
+
+        .category-name {
+            font-size: 28px;
+            font-weight: 700;
+            color: #e4f312;
+            margin-bottom: 15px;
+        }
+
+        .category-description {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #e4f312;
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            background-color: rgba(255, 107, 107, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .progress-indicator {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #e4f312;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 22px;
+                padding: 15px;
+            }
+
+            .question {
+                font-size: 18px;
+                padding: 12px;
+            }
+
+            .option-button {
+                padding: 12px 15px;
+                font-size: 15px;
+            }
+
+            .btn-primary {
+                padding: 12px 30px;
+                font-size: 16px;
+            }
+
+            .results-header h2 {
+                font-size: 24px;
+            }
+
+            .category-name {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Career Decision Framework</h1>
+
+        <!-- Introduction Screen -->
+        <div id="intro-screen">
+            <div class="description">
+                <p>Welcome to the Career Decision Framework assessment. This interactive tool will guide you through a series of questions to help identify the career category that best matches your interests and preferences.</p>
+                <p style="margin-top: 15px;">Answer each question honestly, and you'll be directed to your ideal career path. This assessment takes approximately 5-10 minutes to complete.</p>
+            </div>
+
+            <div class="input-group">
+                <label for="userName">Your Name *</label>
+                <input type="text" id="userName" placeholder="Enter your full name" required>
+                <div id="nameError" class="error-message">Please enter your name</div>
+            </div>
+
+            <button class="btn-primary" onclick="startAssessment()">Start Assessment</button>
+        </div>
+
+        <!-- Question Screen -->
+        <div id="question-screen" class="hidden">
+            <div class="progress-indicator" id="progressIndicator"></div>
+            <div class="question-container">
+                <div class="question" id="questionText"></div>
+                <div class="options" id="optionsContainer"></div>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-screen" class="hidden">
+            <div class="results-header">
+                <h2>Your Career Path</h2>
+                <div class="user-info" id="userInfo"></div>
+            </div>
+
+            <div class="category-result">
+                <div class="category-name" id="categoryName"></div>
+                <div class="category-description" id="categoryDescription"></div>
+            </div>
+
+            <button class="btn-primary" onclick="restartAssessment()">Take Assessment Again</button>
+        </div>
+    </div>
+
+    <script>
+        // Career categories with descriptions
+        const categories = {
+            1: {
+                name: "Technology & Digital",
+                description: "You're drawn to the world of technology, digital innovation, and building systems that shape our digital future. Careers in software development, data science, cybersecurity, UX/UI design, and digital product management align with your interests in creating and working with technology and digital systems."
+            },
+            2: {
+                name: "Creative & Media",
+                description: "Your creative spirit thrives in visual storytelling and original expression. Careers in graphic design, video production, content creation, advertising, journalism, photography, and multimedia arts offer opportunities to bring your creative vision to life and communicate through visual and narrative mediums."
+            },
+            3: {
+                name: "Business & Entrepreneurship",
+                description: "You're energized by commercial success, strategic thinking, and driving business results. Careers in business management, entrepreneurship, sales, marketing, consulting, and business development align with your motivation to create value, lead teams, and achieve measurable business outcomes."
+            },
+            4: {
+                name: "Healthcare & Wellness",
+                description: "Your calling is to help, heal, and support people's physical and mental wellbeing. Careers in medicine, nursing, mental health counseling, physical therapy, public health, nutrition, and healthcare management offer opportunities to make a direct impact on people's health and quality of life."
+            },
+            5: {
+                name: "Education & Training",
+                description: "You find fulfillment in teaching, developing others, and sharing knowledge. Careers in teaching, training and development, educational technology, curriculum design, academic administration, and corporate learning align with your passion for helping others grow and develop their skills and knowledge."
+            },
+            6: {
+                name: "Engineering & Manufacturing",
+                description: "You're motivated by creating tangible physical solutions and working with complex systems. Careers in mechanical, civil, electrical, or industrial engineering, product design, manufacturing, and systems engineering offer opportunities to design, build, and optimize the physical infrastructure and products that shape our world."
+            },
+            7: {
+                name: "Finance & Professional Services",
+                description: "You excel at working with numbers, financial data, and structured analytical thinking. Careers in accounting, financial analysis, investment banking, auditing, tax consulting, and financial planning align with your analytical mind and interest in managing financial resources and providing professional expertise."
+            },
+            8: {
+                name: "Social Impact & Public Service",
+                description: "You're driven by a desire to support people's wellbeing and create positive social change beyond commercial motivations. Careers in social work, non-profit management, community development, public policy, international development, and advocacy offer opportunities to address social challenges and improve communities."
+            },
+            9: {
+                name: "Hospitality & Tourism",
+                description: "You thrive on creating memorable experiences for guests and customers. Careers in hotel management, event planning, tourism management, restaurant operations, travel services, and customer experience design align with your passion for service excellence and creating positive experiences for others."
+            },
+            10: {
+                name: "Trades & Skilled Services",
+                description: "You find satisfaction in developing specialized craft skills and working with tools and materials to create tangible results. Careers in carpentry, plumbing, electrical work, welding, automotive repair, HVAC, and other skilled trades offer opportunities to master technical skills and solve practical problems with your hands."
+            },
+            11: {
+                name: "Science & Research",
+                description: "You're passionate about discovery, research, and understanding how things work through systematic investigation. Careers in scientific research, laboratory work, environmental science, biotechnology, pharmaceuticals, and academic research align with your curiosity and commitment to expanding human knowledge through rigorous inquiry."
+            },
+            12: {
+                name: "Transport & Logistics",
+                description: "You're fascinated by the challenge of moving things and people efficiently through complex systems. Careers in supply chain management, logistics coordination, transportation planning, fleet management, and operations management offer opportunities to optimize movement and ensure efficient delivery of goods and services."
+            }
+        };
+
+        // Question tree structure
+        const questions = {
+            1: {
+                text: "Do you prefer working primarily with IDEAS and INFORMATION rather than directly with PEOPLE or PHYSICAL THINGS?",
+                options: [
+                    { text: "I prefer working with IDEAS and INFORMATION", next: 3 },
+                    { text: "I prefer working with PEOPLE and PHYSICAL THINGS", next: 2 }
+                ]
+            },
+            2: {
+                text: "Do you prefer working directly with PEOPLE and their needs rather than with PHYSICAL THINGS and materials?",
+                options: [
+                    { text: "I prefer working with PEOPLE", next: 9 },
+                    { text: "I prefer working with PHYSICAL THINGS", next: 15 }
+                ]
+            },
+            3: {
+                text: "Do you prefer CREATIVE and ORIGINAL work over STRUCTURED and SYSTEMATIC work?",
+                options: [
+                    { text: "I prefer CREATIVE and ORIGINAL work", next: 4 },
+                    { text: "I prefer STRUCTURED and SYSTEMATIC work", next: 6 }
+                ]
+            },
+            4: {
+                text: "Does your creativity express itself primarily through VISUAL or STORYTELLING mediums?",
+                options: [
+                    { text: "YES - I express creativity through visual or storytelling mediums", category: 2 },
+                    { text: "NO - My creativity expresses differently", next: 5 }
+                ]
+            },
+            5: {
+                text: "Do you enjoy BUILDING or DESIGNING digital products, apps, or systems?",
+                options: [
+                    { text: "YES - I enjoy building or designing digital products", category: 1 },
+                    { text: "NO - I prefer other types of work", category: 11 }
+                ]
+            },
+            6: {
+                text: "Do you prefer working with NUMBERS and FINANCIAL data over SCIENTIFIC or TECHNICAL data?",
+                options: [
+                    { text: "I prefer NUMBERS and FINANCIAL data", category: 7 },
+                    { text: "I prefer SCIENTIFIC or TECHNICAL data", next: 7 }
+                ]
+            },
+            7: {
+                text: "Does your work need to result in TANGIBLE PHYSICAL SOLUTIONS (buildings, products, systems)?",
+                options: [
+                    { text: "YES - I want to create tangible physical solutions", category: 6 },
+                    { text: "NO - Physical tangibility is not essential", next: 8 }
+                ]
+            },
+            8: {
+                text: "Are you primarily interested in TECHNOLOGY and DIGITAL systems?",
+                options: [
+                    { text: "YES - I'm interested in technology and digital systems", category: 1 },
+                    { text: "NO - I prefer other areas", category: 11 }
+                ]
+            },
+            9: {
+                text: "Is your primary motivation to HELP, HEAL, or SUPPORT people's wellbeing?",
+                options: [
+                    { text: "YES - Helping and supporting wellbeing is my primary motivation", next: 10 },
+                    { text: "NO - I have other primary motivations", next: 12 }
+                ]
+            },
+            10: {
+                text: "Do you want to work primarily with PHYSICAL or MENTAL health?",
+                options: [
+                    { text: "YES - I want to focus on physical or mental health", category: 4 },
+                    { text: "NO - I want to support wellbeing in other ways", next: 11 }
+                ]
+            },
+            11: {
+                text: "Is your focus on TEACHING and developing people's knowledge and skills?",
+                options: [
+                    { text: "YES - Teaching and developing others is my focus", category: 5 },
+                    { text: "NO - I want to support people differently", category: 8 }
+                ]
+            },
+            12: {
+                text: "Are you primarily motivated by COMMERCIAL success and business results?",
+                options: [
+                    { text: "YES - Commercial success motivates me", category: 3 },
+                    { text: "NO - I have different motivations", next: 13 }
+                ]
+            },
+            13: {
+                text: "Do you want to create MEMORABLE EXPERIENCES for guests and customers?",
+                options: [
+                    { text: "YES - Creating memorable experiences appeals to me", category: 9 },
+                    { text: "NO - I prefer other types of work", next: 14 }
+                ]
+            },
+            14: {
+                text: "Do you prefer TEACHING and developing others over selling or managing?",
+                options: [
+                    { text: "I prefer TEACHING and developing others", category: 5 },
+                    { text: "I prefer SELLING or MANAGING", category: 3 }
+                ]
+            },
+            15: {
+                text: "Do you prefer working with COMPLEX SYSTEMS and INFRASTRUCTURE over individual products or services?",
+                options: [
+                    { text: "I prefer COMPLEX SYSTEMS and INFRASTRUCTURE", next: 16 },
+                    { text: "I prefer individual PRODUCTS or SERVICES", next: 17 }
+                ]
+            },
+            16: {
+                text: "Is your primary interest in MOVING things and people efficiently?",
+                options: [
+                    { text: "YES - Moving things and people efficiently interests me", category: 12 },
+                    { text: "NO - I'm interested in other aspects of systems", category: 6 }
+                ]
+            },
+            17: {
+                text: "Do you want to develop SPECIALIZED CRAFT SKILLS with tools and materials?",
+                options: [
+                    { text: "YES - I want to develop specialized craft skills", category: 10 },
+                    { text: "NO - I prefer different types of work", next: 18 }
+                ]
+            },
+            18: {
+                text: "Does your work center on creating EXPERIENCES for people?",
+                options: [
+                    { text: "YES - Creating experiences for people is central", category: 9 },
+                    { text: "NO - I focus on other aspects", category: 10 }
+                ]
+            }
+        };
+
+        let userName = "";
+        let currentQuestion = 1;
+        let questionPath = [];
+
+        function startAssessment() {
+            userName = document.getElementById("userName").value.trim();
+            
+            if (!userName) {
+                document.getElementById("nameError").style.display = "block";
+                return;
+            }
+
+            document.getElementById("nameError").style.display = "none";
+            document.getElementById("intro-screen").classList.add("hidden");
+            document.getElementById("question-screen").classList.remove("hidden");
+            
+            showQuestion(1);
+        }
+
+        function showQuestion(questionId) {
+            currentQuestion = questionId;
+            questionPath.push(questionId);
+            
+            const question = questions[questionId];
+            document.getElementById("questionText").textContent = question.text;
+            document.getElementById("progressIndicator").textContent = `Question ${questionPath.length}`;
+            
+            const optionsContainer = document.getElementById("optionsContainer");
+            optionsContainer.innerHTML = "";
+            
+            question.options.forEach((option, index) => {
+                const button = document.createElement("button");
+                button.className = "option-button";
+                button.textContent = option.text;
+                button.onclick = () => handleAnswer(option);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function handleAnswer(option) {
+            if (option.category) {
+                showResults(option.category);
+            } else if (option.next) {
+                showQuestion(option.next);
+            }
+        }
+
+        function showResults(categoryId) {
+            const category = categories[categoryId];
+            
+            document.getElementById("question-screen").classList.add("hidden");
+            document.getElementById("results-screen").classList.remove("hidden");
+            
+            document.getElementById("userInfo").textContent = `${userName}`;
+            document.getElementById("categoryName").textContent = category.name;
+            document.getElementById("categoryDescription").textContent = category.description;
+        }
+
+        function restartAssessment() {
+            userName = "";
+            currentQuestion = 1;
+            questionPath = [];
+            
+            document.getElementById("userName").value = "";
+            document.getElementById("results-screen").classList.add("hidden");
+            document.getElementById("intro-screen").classList.remove("hidden");
+        }
+    </script>
+</body>
+</html>
